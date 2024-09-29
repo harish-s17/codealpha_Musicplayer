@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: rgb(11,165,219);
+    background: linear-gradient(110deg, rgba(11,165,219,1) 0%, rgba(17,131,155,0.24702380952380953) 53%, rgba(49,49,163,1) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.player {
+    background: rgb(11,165,219);
+    background: linear-gradient(110deg, rgba(11,165,219,1) 0%, rgba(17,131,155,0.24702380952380953) 53%, rgba(49,49,163,1) 100%);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    color: rgb(26, 81, 104);
+}
+
+audio {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.controls button {
+    
+    border: none;
+    background-color: #995ec6c9;
+    color:whitesmoke;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.controls button:hover {
+    background-color: #b671e4;
+}
+
+#song-title {
+    margin-top: 10px;
+    font-size: 18px;
+    color: aliceblue;
+}
+
+.song-selection {
+    margin-top: 20px;
+}
+
+.song-selection label {
+    font-size: 16px;
+    margin-right: 10px;
+    color: rgb(26, 81, 104);
+}
+
+.song-selection select {
+    padding: 5px;
+    font-size: 16px;
+    color: rgb(34, 94, 73);
+}
+.song-selection option{
+    background-color:whitesmoke;
+    color: rgb(34, 94, 73);
+}
+</style>
+<body>
+    <div class="player">
+        <h2>Music Player</h2>
+        <audio id="audio-player" controls>
+            <source id="audio-source" src="songs/song 1.wav" type="audio/mp3">
+            Your browser does not support the audio tag.
+        </audio>
+
+        <div class="controls">
+            <button id="prev" style="margin-right: 170px;">Previous</button>
+            <button id="play-pause" style="display: none;">Play/Pause</button>
+            <button id="next">Next</button>
+        </div>
+
+        <div id="song-title">Now Playing: Song 1</div>
+
+        <div class="song-selection">
+            <label for="song-list">Select song:</label>
+            <select id="song-list">
+                <option value="0">Song 1</option>
+                <option value="1">Song 2</option>
+                <option value="2">Song 3</option>
+            </select>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    const songs = [
+    {
+        title: "Song 1",
+        src: "songs/song 1.wav"
+    },
+    {
+        title: "Song 2",
+        src: "songs/song 2.wav"
+    },
+    {
+        title: "Song 3",
+        src: "songs/song 3.wav"
+    }
+];
+
+let currentSongIndex = 0;
+const audioPlayer = document.getElementById('audio-player');
+const audioSource = document.getElementById('audio-source');
+const songTitle = document.getElementById('song-title');
+const playPauseBtn = document.getElementById('play-pause');
+const songList = document.getElementById('song-list');
+
+function loadSong(songIndex) {
+    currentSongIndex = songIndex;
+    audioSource.src = songs[songIndex].src;
+    songTitle.innerText = `Now Playing: ${songs[songIndex].title}`;
+    audioPlayer.load();
+    audioPlayer.play();
+}
+
+document.getElementById('prev').addEventListener('click', () => {
+    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    loadSong(currentSongIndex);
+});
+
+document.getElementById('next').addEventListener('click', () => {
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    loadSong(currentSongIndex);
+});
+
+playPauseBtn.addEventListener('click', () => {
+    if (audioPlayer.paused) {
+        audioPlayer.play();
+    } else {
+        audioPlayer.pause();
+    }
+});
+
+
+songList.addEventListener('change', (event) => {
+    const selectedSongIndex = parseInt(event.target.value);
+    loadSong(selectedSongIndex);
+});
+
+
+window.onload = () => {
+    loadSong(currentSongIndex);
+};
+
+</script>
